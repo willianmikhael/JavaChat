@@ -18,7 +18,6 @@ public class TCPChatClient {
         in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         consoleReader = new BufferedReader(new InputStreamReader(System.in));
 
-        System.out.println("Connected to the server. Start typing your messages.");
 
         // Start a separate thread to listen for server messages
         Thread messageListener = new Thread(this::listenForMessages);
@@ -55,7 +54,16 @@ public class TCPChatClient {
     public static void main(String[] args) {
         TCPChatClient client = new TCPChatClient();
         try {
-            client.start("127.0.0.1", 12345);
+            BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in));
+
+            System.out.println("Enter the server IP address: ");
+            String serverIP = consoleReader.readLine();
+
+            System.out.println("Enter the server port: ");
+            int serverPort = Integer.parseInt(consoleReader.readLine());
+
+            client.start(serverIP, serverPort);
+
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         } finally {

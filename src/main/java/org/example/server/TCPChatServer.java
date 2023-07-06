@@ -19,7 +19,6 @@ public class TCPChatServer {
         System.out.println("Server started. Waiting for a client to connect...");
 
         clientSocket = serverSocket.accept();
-        System.out.println("Client connected: " + clientSocket.getInetAddress().getHostAddress());
 
         out = new PrintWriter(clientSocket.getOutputStream(), true);
         in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
