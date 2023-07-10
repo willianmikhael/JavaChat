@@ -18,23 +18,28 @@ public class TCPChatClient {
         in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         consoleReader = new BufferedReader(new InputStreamReader(System.in));
 
+        // Start a separate thread to listen for server responses
+        Thread responseListener = new Thread(this::listenForResponses);
+        responseListener.start();
 
-        // Start a separate thread to listen for server messages
-        Thread messageListener = new Thread(this::listenForMessages);
-        messageListener.start();
+        System.out.println("Enter your guesses (between 1 and 10):");
 
-        // Send messages to the server
+        // Send guesses to the server
         String userInput;
         while ((userInput = consoleReader.readLine()) != null) {
             out.println(userInput);
         }
     }
 
-    private void listenForMessages() {
+    private void listenForResponses() {
         try {
             String serverResponse;
             while ((serverResponse = in.readLine()) != null) {
                 System.out.println("Server: " + serverResponse);
+
+                if (serverResponse.startsWith("Correct")) {
+                    break;
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
